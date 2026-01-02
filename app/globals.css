@@ -1,26 +1,229 @@
-@import "tailwindcss";
+/* app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* ---------- Base theme ---------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: 0 0% 4%;
+  --bg2: 0 0% 7%;
+  --panel: 0 0% 9%;
+  --panel2: 0 0% 12%;
+  --text: 0 0% 96%;
+  --muted: 0 0% 70%;
+  --border: 0 0% 18%;
+
+  --red: 0 92% 56%;
+  --red2: 0 92% 46%;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: hsl(var(--bg));
+  color: hsl(var(--text));
+  overflow-x: hidden;
+  font-feature-settings: "ss01" on, "ss02" on, "cv11" on;
+}
+
+/* ---------- Safe cinematic background FX ---------- */
+.fx {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(1200px 900px at 15% 10%, hsla(var(--red) / 0.16), transparent 60%),
+    radial-gradient(900px 650px at 85% 25%, hsla(var(--red) / 0.10), transparent 55%),
+    radial-gradient(900px 900px at 50% 110%, rgba(255, 0, 80, 0.10), transparent 55%),
+    linear-gradient(to bottom, hsl(var(--bg)), hsl(var(--bg2)));
+}
+.fx::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(to right, hsla(var(--red) / 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, hsla(var(--red) / 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(circle at 50% 25%, black 0%, transparent 72%);
+  opacity: 0.9;
+}
+.fx::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.025),
+    rgba(255, 255, 255, 0.025) 1px,
+    rgba(0, 0, 0, 0) 4px,
+    rgba(0, 0, 0, 0) 7px
+  );
+  opacity: 0.14;
+  mix-blend-mode: overlay;
+}
+.content-layer {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+}
+
+/* ---------- Glass / glow ---------- */
+.glass {
+  background: linear-gradient(180deg, rgba(18, 18, 18, 0.72), rgba(8, 8, 8, 0.68));
+  border: 1px solid rgba(255, 0, 80, 0.18);
+  box-shadow:
+    0 0 0 1px rgba(255, 0, 80, 0.05),
+    0 18px 70px rgba(0, 0, 0, 0.65);
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+}
+.glow {
+  box-shadow:
+    0 0 0 1px rgba(255, 0, 80, 0.18),
+    0 0 34px rgba(255, 0, 80, 0.18),
+    0 22px 90px rgba(0, 0, 0, 0.75);
+}
+
+/* ---------- Buttons / pills ---------- */
+.btn {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 0, 80, 0.26);
+  background: linear-gradient(180deg, rgba(255, 0, 80, 0.22), rgba(255, 0, 80, 0.10));
+  color: rgba(255, 240, 244, 0.98);
+  padding: 10px 12px;
+  transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 34px rgba(255, 0, 80, 0.22);
+  background: linear-gradient(180deg, rgba(255, 0, 80, 0.28), rgba(255, 0, 80, 0.12));
+}
+.btn:active {
+  transform: translateY(0);
+}
+.btn-ghost {
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(0, 0, 0, 0.25);
+  color: rgba(255, 255, 255, 0.86);
+  padding: 10px 12px;
+  transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease;
+}
+.btn-ghost:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 28px rgba(255, 0, 80, 0.14);
+}
+
+.pill {
+  border: 1px solid rgba(255, 0, 80, 0.22);
+  background: rgba(255, 0, 80, 0.08);
+  border-radius: 999px;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+}
+
+/* ---------- Terminal ---------- */
+.terminal {
+  background: linear-gradient(180deg, rgba(10, 10, 10, 0.92), rgba(0, 0, 0, 0.92));
+  border: 1px solid rgba(255, 0, 80, 0.22);
+  border-radius: 18px;
+  overflow: hidden;
+}
+.term-topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 0, 80, 0.14);
+  background: rgba(255, 0, 80, 0.05);
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 0, 80, 0.55);
+  box-shadow: 0 0 14px rgba(255, 0, 80, 0.35);
+}
+.term-body {
+  padding: 14px 14px 16px;
+  line-height: 1.6;
+}
+.term-line {
+  display: flex;
+  gap: 10px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.prompt {
+  color: rgba(255, 0, 80, 0.88);
+}
+.term-text {
+  color: rgba(245, 245, 245, 0.92);
+}
+.dim {
+  color: rgba(190, 190, 190, 0.70);
+}
+.blink {
+  display: inline-block;
+  width: 9px;
+  height: 16px;
+  background: rgba(255, 0, 80, 0.85);
+  margin-left: 6px;
+  animation: blink 1s steps(2, start) infinite;
+  vertical-align: -2px;
+}
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}
+.input {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 0, 80, 0.20);
+  background: rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.95);
+  padding: 10px 12px;
+  outline: none;
+}
+.input:focus {
+  border-color: rgba(255, 0, 80, 0.46);
+  box-shadow: 0 0 0 4px rgba(255, 0, 80, 0.12);
+}
+
+::selection {
+  background: rgba(255, 0, 80, 0.30);
+}
+
+/* ---- 3D tilt ---- */
+.tilt {
+  transform-style: preserve-3d;
+  perspective: 1100px;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+}
+.tilt:hover {
+  box-shadow:
+    0 0 0 1px rgba(255, 0, 80, 0.22),
+    0 0 40px rgba(255, 0, 80, 0.16),
+    0 26px 110px rgba(0, 0, 0, 0.78);
+}
+
+/* ---- Draggable panel handle ---- */
+.handle {
+  cursor: grab;
+}
+.handle:active {
+  cursor: grabbing;
 }
